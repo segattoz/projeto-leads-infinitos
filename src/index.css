@@ -1,0 +1,210 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Paleta Segatto's Leads — dark tech green */
+  --color-bg: #0a0e0c;
+  --color-surface: #101512;
+  --color-surface-2: #151c17;
+  --color-surface-3: #1b241d;
+  --color-line: #212b24;
+  --color-line-strong: #2e3b32;
+  --color-ink: #ecf1ed;
+  --color-muted: #8fa096;
+  --color-faint: #61705f;
+  --color-primary: #2ed573;
+  --color-primary-strong: #45eb8b;
+  --color-primary-dim: #17482c;
+  --color-lime: #b8f542;
+  --color-danger: #f0655a;
+  --color-warn: #e8b04b;
+
+  --animate-fade-in: fade-in 0.35s ease both;
+  --animate-slide-up: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marker-pop: marker-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes marker-pop {
+    from { opacity: 0; transform: scale(0.3); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Scrollbars discretas */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Fundo com grade de coordenadas sutil */
+.grid-bg {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-primary) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 4%, transparent) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* ── Radar (splash) ─────────────────────────────────────────────────────── */
+.radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 300deg,
+    color-mix(in srgb, var(--color-primary) 25%, transparent) 348deg,
+    color-mix(in srgb, var(--color-primary) 55%, transparent) 360deg
+  );
+  animation: radar-spin 4.2s linear infinite;
+}
+@keyframes radar-spin {
+  to { transform: rotate(360deg); }
+}
+.radar-ping {
+  animation: radar-ping 2.4s ease-out infinite;
+}
+@keyframes radar-ping {
+  0% { transform: scale(0.4); opacity: 0.8; }
+  70% { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* ── Mapa / Leaflet ─────────────────────────────────────────────────────── */
+.leaflet-container {
+  background: #0d1210;
+  font-family: var(--font-sans);
+  outline: none;
+}
+.leaflet-control-zoom a {
+  background: var(--color-surface-2) !important;
+  color: var(--color-ink) !important;
+  border-color: var(--color-line) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: var(--color-surface-3) !important;
+}
+.leaflet-bar {
+  border: 1px solid var(--color-line) !important;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.4) !important;
+}
+.leaflet-control-attribution {
+  background: rgb(10 14 12 / 0.75) !important;
+  color: var(--color-faint) !important;
+  font-size: 10px !important;
+}
+.leaflet-control-attribution a {
+  color: var(--color-muted) !important;
+}
+.leaflet-interactive:focus {
+  outline: none;
+}
+
+/* Marcadores de empresa */
+.company-marker {
+  background: transparent;
+  border: none;
+}
+.company-marker .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  border: 2px solid #0a0e0c;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 45%, transparent);
+  transition: transform 0.15s ease;
+  animation: var(--animate-marker-pop);
+}
+.company-marker:hover .dot {
+  transform: scale(1.35);
+}
+.company-marker.is-selected .dot {
+  transform: scale(1.4);
+  background: var(--color-lime);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-lime) 50%, transparent);
+}
+.company-marker.is-high .dot {
+  background: var(--color-primary-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-strong) 55%, transparent);
+}
+.company-marker.is-high .pulse {
+  position: absolute;
+  inset: -7px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-primary-strong);
+  animation: radar-ping 2s ease-out infinite;
+}
+.company-marker .new-badge {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-lime);
+  color: #101408;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Vértices do desenho de polígono */
+.draw-vertex {
+  background: transparent;
+  border: none;
+}
+.draw-vertex .v {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: var(--color-lime);
+  border: 2px solid #0a0e0c;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-lime) 55%, transparent);
+  cursor: pointer;
+}
+.draw-vertex .v.first {
+  transform: scale(1.2);
+}
+
+.leaflet-container.is-drawing {
+  cursor: crosshair;
+}
