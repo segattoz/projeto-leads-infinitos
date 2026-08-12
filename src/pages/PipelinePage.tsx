@@ -41,7 +41,7 @@ export function PipelinePage() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-end justify-between px-6 pb-4 pt-6">
+      <div className="flex flex-col items-start gap-3 px-4 pb-4 pt-6 sm:flex-row sm:items-end sm:justify-between sm:px-6">
         <div>
           <h1 className="text-xl font-bold text-ink">Pipeline</h1>
           <p className="mt-1 text-sm text-muted">
@@ -55,7 +55,7 @@ export function PipelinePage() {
       </div>
 
       {leads.length === 0 ? (
-        <div className="px-6">
+        <div className="px-4 sm:px-6">
           <EmptyState
             icon={KanbanSquare}
             title="Suas melhores oportunidades podem começar aqui."

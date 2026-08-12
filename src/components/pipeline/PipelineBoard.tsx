@@ -57,7 +57,7 @@ export function PipelineBoard({ leads, onMoveLead, onLeadClick }: PipelineBoardP
       onDragEnd={handleDragEnd}
       onDragCancel={() => setActiveLead(null)}
     >
-      <div className="flex h-full gap-3 overflow-x-auto px-6 pb-6">
+      <div className="flex h-full gap-3 overflow-x-auto px-4 pb-6 sm:px-6">
         {PIPELINE_STAGES.map((stage) => (
           <PipelineColumn
             key={stage.id}

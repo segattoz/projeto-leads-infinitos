@@ -45,8 +45,22 @@ export function ResultsPanel({
   }, [companies, sortBy, minScore, porte, onlyWithPhone, onlyDigital])
 
   return (
-    <div className="flex h-full w-[372px] shrink-0 flex-col border-l border-line bg-surface animate-[results-in_0.35s_cubic-bezier(0.16,1,0.3,1)_both]">
-      <style>{`@keyframes results-in { from { transform: translateX(30px); opacity: 0 } to { transform: translateX(0); opacity: 1 } }`}</style>
+    <div
+      className={cn(
+        'fixed inset-x-0 bottom-0 z-[1150] flex max-h-[78vh] w-full flex-col rounded-t-2xl border-t border-line bg-surface shadow-2xl shadow-black/50',
+        'animate-[sheet-up_0.32s_cubic-bezier(0.16,1,0.3,1)_both]',
+        'xl:static xl:z-auto xl:h-full xl:max-h-none xl:w-[372px] xl:shrink-0 xl:rounded-none xl:border-t-0 xl:border-l xl:shadow-none',
+        'xl:animate-[results-in_0.35s_cubic-bezier(0.16,1,0.3,1)_both]',
+      )}
+    >
+      <style>{`
+        @keyframes results-in { from { transform: translateX(30px); opacity: 0 } to { transform: translateX(0); opacity: 1 } }
+        @keyframes sheet-up { from { transform: translateY(24px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+      `}</style>
+
+      <div className="flex justify-center pt-2 xl:hidden" aria-hidden>
+        <span className="h-1 w-10 rounded-full bg-line-strong" />
+      </div>
 
       <div className="flex items-center justify-between border-b border-line px-4 py-3">
         <div>

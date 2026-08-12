@@ -14,7 +14,7 @@ export function SettingsPage() {
   const userName = useSettingsStore((s) => s.userName)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 px-6 py-8">
+    <div className="mx-auto max-w-2xl space-y-5 px-4 py-6 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-xl font-bold text-ink">Configurações</h1>
         <p className="mt-1 text-sm text-muted">Preferências da sua conta e da plataforma.</p>

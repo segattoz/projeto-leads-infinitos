@@ -21,9 +21,9 @@ export function DashboardPage() {
   const metrics = useMemo(() => getDashboardMetrics(leads), [leads])
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-6 py-8 animate-fade-in">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 animate-fade-in sm:px-6 sm:py-8">
       <div>
-        <h1 className="text-2xl font-bold text-ink">
+        <h1 className="text-xl font-bold text-ink sm:text-2xl">
           {greeting()}, {userName}.
         </h1>
         <p className="mt-1 text-sm text-muted">
@@ -31,7 +31,7 @@ export function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <MetricCard
           icon={Target}
           label="Oportunidades encontradas"
@@ -62,7 +62,7 @@ export function DashboardPage() {
       <OpportunityChart />
 
       <section>
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-sm font-bold uppercase tracking-[0.14em] text-muted">
             Territórios monitorados
           </h2>

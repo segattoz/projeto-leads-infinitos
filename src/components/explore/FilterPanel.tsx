@@ -1,4 +1,4 @@
-import { Circle as CircleIcon, Eraser, Hexagon, Radar } from 'lucide-react'
+import { Circle as CircleIcon, Eraser, Hexagon, Radar, X } from 'lucide-react'
 import type { AreaMode } from '@/types'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -28,19 +28,41 @@ interface FilterPanelProps {
   onClearArea: () => void
   onSearch: () => void
   searching: boolean
+  /** Controla a visibilidade em telas menores que `xl`, onde o painel vira um overlay de tela cheia. */
+  mobileOpen: boolean
+  onMobileClose: () => void
 }
 
-/** Painel lateral de filtros da tela Explorar Território. */
+/**
+ * Painel de filtros da tela Explorar Território.
+ * Em telas `xl+` é uma coluna lateral sempre visível; abaixo disso vira um
+ * overlay de tela cheia acionado pela barra de ferramentas mobile.
+ */
 export function FilterPanel(props: FilterPanelProps) {
   const segment = props.segmentSlug ? getSegment(props.segmentSlug) : undefined
 
   return (
-    <div className="flex h-full w-[290px] shrink-0 flex-col border-r border-line bg-surface">
-      <div className="border-b border-line px-5 py-4">
-        <h1 className="text-base font-bold text-ink">Explore seu mercado</h1>
-        <p className="mt-1 text-xs text-muted">
-          Escolha quem você procura e onde deseja vender.
-        </p>
+    <div
+      className={cn(
+        'fixed inset-0 z-[1150] w-full flex-col bg-surface',
+        props.mobileOpen ? 'flex' : 'hidden',
+        'xl:static xl:z-auto xl:flex xl:h-full xl:w-[290px] xl:shrink-0 xl:border-r xl:border-line',
+      )}
+    >
+      <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
+        <div>
+          <h1 className="text-base font-bold text-ink">Explore seu mercado</h1>
+          <p className="mt-1 text-xs text-muted">
+            Escolha quem você procura e onde deseja vender.
+          </p>
+        </div>
+        <button
+          onClick={props.onMobileClose}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-faint transition-colors hover:bg-surface-3 hover:text-ink xl:hidden"
+          aria-label="Fechar filtros"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
       <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">

@@ -51,7 +51,7 @@ export function SplashPage() {
       <div className="relative z-10 flex flex-col items-center px-6 text-center animate-slide-up">
         <LogoMark className="h-16 w-16" />
 
-        <h1 className="mt-8 text-4xl font-extrabold leading-tight tracking-[0.18em] text-ink md:text-5xl">
+        <h1 className="mt-8 text-3xl font-extrabold leading-tight tracking-[0.14em] text-ink sm:text-4xl sm:tracking-[0.18em] md:text-5xl">
           SEGATTO'S
           <br />
           <span className="text-primary">LEADS</span>

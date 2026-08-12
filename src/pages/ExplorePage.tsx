@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import area from '@turf/area'
 import { polygon as turfPolygon } from '@turf/helpers'
-import { Flame, Hexagon, MousePointerClick } from 'lucide-react'
+import { Flame, Hexagon, MousePointerClick, Radar, SlidersHorizontal } from 'lucide-react'
 import type { AreaMode, CompanyWithScore, ProspectingQuery } from '@/types'
-import { formatKm2 } from '@/lib/utils'
+import { cn, formatKm2 } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { FilterPanel } from '@/components/explore/FilterPanel'
@@ -59,6 +59,13 @@ export function ExplorePage() {
   const clearSearch = useSearchStore((s) => s.clear)
   const [resultsPanelOpen, setResultsPanelOpen] = useState(result !== null)
 
+  // Painel de filtros em telas menores que `xl` (overlay de tela cheia).
+  // Começa aberto apenas quando ainda não há um resultado — evita reabrir
+  // por cima do mapa/resultados ao simplesmente voltar para esta tela.
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(
+    () => useSearchStore.getState().result === null,
+  )
+
   // Seleção / drawer
   const [selectedCompany, setSelectedCompany] = useState<CompanyWithScore | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -99,6 +106,9 @@ export function ExplorePage() {
     setClosedPolygon(null)
     setDrawPoints([])
     setDrawing(true)
+    // Em telas pequenas o painel de filtros cobre o mapa inteiro — fecha
+    // para revelar o mapa e permitir o desenho do polígono.
+    setMobileFiltersOpen(false)
   }, [])
 
   const handleAddDrawPoint = useCallback((p: DrawPoint) => {
@@ -157,6 +167,7 @@ export function ExplorePage() {
     setSearching(true)
     setResultsPanelOpen(false)
     setSelectedCompany(null)
+    setMobileFiltersOpen(false)
 
     try {
       const [searchResult] = await Promise.all([
@@ -215,7 +226,7 @@ export function ExplorePage() {
   const segment = segmentSlug ? getSegment(segmentSlug) : undefined
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full flex-col xl:flex-row">
       <FilterPanel
         city={city}
         onCityChange={setCity}
@@ -236,7 +247,22 @@ export function ExplorePage() {
         onClearArea={handleClearArea}
         onSearch={handleSearch}
         searching={searching}
+        mobileOpen={mobileFiltersOpen}
+        onMobileClose={() => setMobileFiltersOpen(false)}
       />
+
+      {/* Barra de contexto mobile — acesso rápido aos filtros */}
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-line bg-surface px-4 py-2.5 xl:hidden">
+        <div className="min-w-0">
+          <p className="truncate text-xs font-semibold text-ink">
+            {segment?.name ?? 'Escolha um segmento'}
+          </p>
+          <p className="truncate text-[10px] text-faint">{city}</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => setMobileFiltersOpen(true)}>
+          <SlidersHorizontal className="h-3.5 w-3.5" /> Filtros
+        </Button>
+      </div>
 
       <div className="relative min-w-0 flex-1">
         <ProspectingMap
@@ -254,9 +280,9 @@ export function ExplorePage() {
 
         {/* Tooltip de desenho */}
         {drawing && (
-          <div className="pointer-events-none absolute left-1/2 top-4 z-[1000] -translate-x-1/2 animate-slide-up">
-            <div className="flex items-center gap-2 rounded-lg border border-line-strong bg-surface/95 px-4 py-2.5 text-xs text-ink shadow-xl shadow-black/40">
-              <MousePointerClick className="h-3.5 w-3.5 text-lime" />
+          <div className="pointer-events-none absolute inset-x-3 top-4 z-[1000] flex justify-center animate-slide-up sm:inset-x-0">
+            <div className="max-w-full rounded-lg border border-line-strong bg-surface/95 px-4 py-2.5 text-center text-xs text-ink shadow-xl shadow-black/40">
+              <MousePointerClick className="mr-1.5 inline-block h-3.5 w-3.5 shrink-0 align-[-2px] text-lime" />
               {drawPoints.length === 0
                 ? 'Clique no mapa para começar a desenhar sua área de prospecção.'
                 : drawPoints.length < 3
@@ -287,39 +313,48 @@ export function ExplorePage() {
           </div>
         )}
 
-        {/* Controle do mapa de calor */}
-        <div className="absolute right-4 top-4 z-[1000]">
-          <div className="rounded-lg border border-line-strong bg-surface/95 px-3.5 py-2.5 shadow-xl shadow-black/40">
-            <Switch
-              checked={heatmapEnabled}
-              onChange={setHeatmapEnabled}
-              label={
-                <span className="flex items-center gap-1.5 text-xs">
-                  <Flame className="h-3.5 w-3.5 text-primary" /> Mapa de calor
-                </span>
-              }
-            />
-            {heatmapEnabled && (
-              <div className="mt-2 animate-fade-in">
-                <div
-                  className="h-1.5 w-full rounded-full"
-                  style={{
-                    background:
-                      'linear-gradient(90deg, #123524, #1d7a44, #2ed573, #b8f542)',
-                  }}
-                />
-                <div className="mt-1 flex justify-between text-[9px] text-faint">
-                  <span>Menor concentração</span>
-                  <span>Maior</span>
+        {/* Controle do mapa de calor — oculto durante o desenho para não
+            disputar espaço com o tooltip em telas estreitas */}
+        {!drawing && (
+          <div className="absolute right-4 top-4 z-[1000]">
+            <div className="rounded-lg border border-line-strong bg-surface/95 px-3.5 py-2.5 shadow-xl shadow-black/40">
+              <Switch
+                checked={heatmapEnabled}
+                onChange={setHeatmapEnabled}
+                label={
+                  <span className="flex items-center gap-1.5 text-xs">
+                    <Flame className="h-3.5 w-3.5 text-primary" /> Mapa de calor
+                  </span>
+                }
+              />
+              {heatmapEnabled && (
+                <div className="mt-2 animate-fade-in">
+                  <div
+                    className="h-1.5 w-full rounded-full"
+                    style={{
+                      background:
+                        'linear-gradient(90deg, #123524, #1d7a44, #2ed573, #b8f542)',
+                    }}
+                  />
+                  <div className="mt-1 flex justify-between text-[9px] text-faint">
+                    <span>Menor concentração</span>
+                    <span>Maior</span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Contexto da busca atual */}
+        {/* Contexto da busca atual — no mobile some quando o painel de
+            resultados (bottom sheet) já mostra a mesma contagem */}
         {result && segment && !drawing && (
-          <div className="absolute bottom-6 left-4 z-[1000] animate-fade-in">
+          <div
+            className={cn(
+              'absolute bottom-6 left-4 z-[1000] animate-fade-in',
+              resultsPanelOpen && 'hidden xl:block',
+            )}
+          >
             <div className="rounded-lg border border-line-strong bg-surface/95 px-3.5 py-2 text-xs shadow-xl shadow-black/40">
               <span className="font-semibold text-ink">{companies.length}</span>{' '}
               <span className="text-muted">
@@ -327,6 +362,23 @@ export function ExplorePage() {
                 {city}
               </span>
             </div>
+          </div>
+        )}
+
+        {/* Atalho de busca mobile — evita reabrir o painel de filtros só
+            para acionar o botão principal */}
+        {!mobileFiltersOpen && !drawing && !resultsPanelOpen && (
+          <div className="absolute bottom-4 left-3 right-16 z-[1000] xl:hidden">
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full shadow-xl shadow-black/50"
+              onClick={handleSearch}
+              disabled={searching}
+            >
+              <Radar className={cn('h-4 w-4 shrink-0', searching && 'animate-spin')} />
+              {searching ? 'ANALISANDO...' : 'ENCONTRAR OPORTUNIDADES'}
+            </Button>
           </div>
         )}
 

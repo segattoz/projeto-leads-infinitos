@@ -23,8 +23,8 @@ export function MonitoringPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
-      <div className="flex items-end justify-between gap-4">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-ink">Territórios monitorados</h1>
           <p className="mt-1 text-sm text-muted">
