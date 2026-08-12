@@ -44,6 +44,22 @@ Não há variáveis de ambiente nem serviços externos obrigatórios: se os tile
 do mapa não carregarem (sem internet), o restante da aplicação continua
 funcionando — prioridade é demo previsível.
 
+## Deploy na Vercel
+
+O projeto já está pronto para a Vercel (`vercel.json` incluído, com fallback de
+SPA e cache imutável de assets):
+
+1. Em [vercel.com/new](https://vercel.com/new), importe este repositório do
+   GitHub. A Vercel detecta o Vite automaticamente (build `npm run build`,
+   output `dist/`) — não altere nada.
+2. Selecione a branch desejada e clique em **Deploy**.
+
+Ou via CLI: `npm i -g vercel && vercel` na raiz do projeto.
+
+Nenhuma variável de ambiente é necessária. As rotas (`/app/explorar`,
+`/app/pipeline`, …) funcionam com refresh e link direto graças ao rewrite de
+SPA do `vercel.json`.
+
 ## Fluxo principal (roteiro da demo)
 
 1. **Abertura** → `EXPLORAR OPORTUNIDADES` → Dashboard (247 oportunidades).

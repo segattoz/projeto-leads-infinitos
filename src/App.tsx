@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { SplashPage } from '@/pages/SplashPage'
@@ -11,7 +11,7 @@ import { SettingsPage } from '@/pages/SettingsPage'
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<SplashPage />} />
         <Route path="/app" element={<AppLayout />}>
@@ -35,6 +35,6 @@ export default function App() {
           },
         }}
       />
-    </HashRouter>
+    </BrowserRouter>
   )
 }
