@@ -29,7 +29,7 @@ export function Checkbox({ checked, onChange, label, className, disabled, ...res
         className={cn(
           'flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border transition-colors',
           checked
-            ? 'border-primary bg-primary text-white'
+            ? 'border-primary bg-primary text-on-brand'
             : 'border-line-strong bg-surface-2 text-transparent hover:border-primary/50',
           disabled && 'cursor-not-allowed hover:border-line-strong',
         )}

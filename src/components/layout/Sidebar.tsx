@@ -74,7 +74,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-[1300] flex h-full w-[264px] flex-col border-r border-line bg-surface transition-transform duration-300',
+          'fixed inset-y-0 left-0 z-[1300] flex h-full w-[264px] flex-col border-r border-line bg-sidebar transition-transform duration-300',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
           'md:static md:z-auto md:w-auto md:translate-x-0 md:transition-[width]',
           collapsed ? 'md:w-[64px]' : 'md:w-[224px]',
@@ -96,15 +96,15 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-4 overflow-y-auto p-2.5" aria-label="Navegação principal">
+        <nav className="flex-1 space-y-5 overflow-y-auto p-2.5" aria-label="Navegação principal">
           {NAV_GROUPS.map((group) => (
             <div key={group.label}>
               {!effectiveCollapsed && (
-                <p className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-faint">
+                <p className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-faint">
                   {group.label}
                 </p>
               )}
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {group.items.map(({ to, label, icon: Icon, end }) => {
                   const link = (
                     <NavLink
@@ -114,16 +114,27 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                       onClick={onMobileClose}
                       className={({ isActive }) =>
                         cn(
-                          'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-colors',
+                          'group relative flex items-center gap-3 rounded-lg py-2.5 pl-3.5 pr-3 text-[13px] font-medium transition-colors',
                           effectiveCollapsed && 'justify-center px-0',
                           isActive
-                            ? 'bg-primary-dim text-primary-strong'
-                            : 'text-muted hover:bg-surface-3 hover:text-ink',
+                            ? 'bg-primary/12 text-primary-strong'
+                            : 'text-muted hover:bg-white/[0.03] hover:text-ink',
                         )
                       }
                     >
-                      <Icon className="h-[18px] w-[18px] shrink-0" />
-                      {!effectiveCollapsed && <span className="truncate">{label}</span>}
+                      {({ isActive }) => (
+                        <>
+                          <span
+                            className={cn(
+                              'absolute left-0 top-1/2 h-4.5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary transition-all',
+                              isActive ? 'opacity-100' : 'opacity-0',
+                            )}
+                            aria-hidden
+                          />
+                          <Icon className="h-[18px] w-[18px] shrink-0" />
+                          {!effectiveCollapsed && <span className="truncate">{label}</span>}
+                        </>
+                      )}
                     </NavLink>
                   )
                   return effectiveCollapsed ? (
@@ -143,7 +154,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
           <button
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] text-faint transition-colors hover:bg-surface-3 hover:text-ink',
+              'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] text-faint transition-colors hover:bg-white/[0.03] hover:text-ink',
               collapsed && 'justify-center px-0',
             )}
             aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'}

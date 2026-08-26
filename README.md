@@ -40,8 +40,8 @@ limitação escondida:
 ## Stack
 
 - **React 18 + TypeScript + Vite**
-- **Tailwind CSS 4** (tema claro, tokens em `src/index.css`) + **Lucide Icons**
-- **Leaflet + OpenStreetMap** (tiles CARTO claros, sem token pago)
+- **Tailwind CSS 4** (tema dark premium + verde de identidade, tokens em `src/index.css`) + **Lucide Icons**
+- **Leaflet + OpenStreetMap** (tiles CARTO escuros, sem token pago)
 - **Turf.js** — filtragem geoespacial real (point-in-polygon, raio, área)
 - **Zustand** — estado global org-scoped, persistido em `localStorage`
 - **@dnd-kit** — drag & drop do Kanban (Funil)

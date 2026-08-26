@@ -4,31 +4,35 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Paleta i9 Radar — B2B claro: branco + azul estrutural + verde sucesso + laranja alerta */
-  --color-bg: #f5f7fa;
-  --color-surface: #ffffff;
-  --color-surface-2: #f4f6f8;
-  --color-surface-3: #eaedf1;
-  --color-line: #e2e6eb;
-  --color-line-strong: #cdd3db;
-  --color-ink: #131a24;
-  --color-muted: #5b6472;
-  --color-faint: #8992a1;
+  /* Paleta i9 Radar — dark tech premium: grafite quase preto + verde de identidade.
+     Evolução direta da paleta original do Segatto's Leads (dark tech green). */
+  --color-bg: #0a0d0b;
+  --color-surface: #12140f;
+  --color-surface-2: #171a14;
+  --color-surface-3: #1e221b;
+  --color-sidebar: #0c1310;
+  --color-line: #232a20;
+  --color-line-strong: #303a2c;
+  --color-ink: #eef1ec;
+  --color-muted: #93a196;
+  --color-faint: #5f6d61;
 
-  --color-primary: #2f6fed;
-  --color-primary-strong: #1e56d6;
-  --color-primary-dim: #e8f0fe;
+  --color-primary: #22c55e;
+  --color-primary-strong: #4ade80;
+  --color-primary-dim: #10261a;
+  --color-on-brand: #06180e;
 
-  --color-success: #17925a;
-  --color-success-strong: #0f7a49;
-  --color-success-dim: #e3f6ec;
+  --color-success: #34d399;
+  --color-success-strong: #6ee7b7;
+  --color-success-dim: #102a20;
 
-  --color-warn: #d9720f;
-  --color-warn-strong: #b85e08;
-  --color-warn-dim: #fdf0e1;
+  --color-warn: #e8a13e;
+  --color-warn-strong: #f7bd63;
+  --color-warn-dim: #2c2211;
 
-  --color-danger: #d9433a;
-  --color-danger-dim: #fbe9e8;
+  --color-danger: #ef5f57;
+  --color-danger-strong: #f68b85;
+  --color-danger-dim: #2c1715;
 
   --animate-fade-in: fade-in 0.35s ease both;
   --animate-slide-up: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -54,8 +58,16 @@ body,
   height: 100%;
 }
 
+:root {
+  color-scheme: dark;
+}
+
 body {
   background-color: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse 900px 500px at 12% -10%, color-mix(in srgb, var(--color-primary) 7%, transparent), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 0%, color-mix(in srgb, var(--color-primary) 4%, transparent), transparent 55%);
+  background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -63,7 +75,7 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-primary) 22%, transparent);
+  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
 /* Scrollbars discretas */
@@ -86,9 +98,17 @@ body {
 /* Fundo com grade de coordenadas sutil (splash / empty states) */
 .grid-bg {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--color-primary) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 6%, transparent) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--color-primary) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 5%, transparent) 1px, transparent 1px);
   background-size: 42px 42px;
+}
+
+/* Glow discreto em elementos-chave (score, radar, oportunidades) */
+.glow-primary {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent), 0 8px 28px -12px color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+.text-glow {
+  text-shadow: 0 0 18px color-mix(in srgb, var(--color-primary) 35%, transparent);
 }
 
 /* ── Radar (splash / loading) ───────────────────────────────────────────── */
@@ -100,8 +120,8 @@ body {
     from 0deg,
     transparent 0deg,
     transparent 300deg,
-    color-mix(in srgb, var(--color-primary) 20%, transparent) 348deg,
-    color-mix(in srgb, var(--color-primary) 42%, transparent) 360deg
+    color-mix(in srgb, var(--color-primary) 25%, transparent) 348deg,
+    color-mix(in srgb, var(--color-primary) 55%, transparent) 360deg
   );
   animation: radar-spin 4.2s linear infinite;
 }
@@ -119,24 +139,24 @@ body {
 
 /* ── Mapa / Leaflet ─────────────────────────────────────────────────────── */
 .leaflet-container {
-  background: #eef1f5;
+  background: #0b100c;
   font-family: var(--font-sans);
   outline: none;
 }
 .leaflet-control-zoom a {
-  background: var(--color-surface) !important;
+  background: var(--color-surface-2) !important;
   color: var(--color-ink) !important;
   border-color: var(--color-line) !important;
 }
 .leaflet-control-zoom a:hover {
-  background: var(--color-surface-2) !important;
+  background: var(--color-surface-3) !important;
 }
 .leaflet-bar {
   border: 1px solid var(--color-line) !important;
-  box-shadow: 0 4px 16px rgb(20 30 50 / 0.12) !important;
+  box-shadow: 0 4px 18px rgb(0 0 0 / 0.45) !important;
 }
 .leaflet-control-attribution {
-  background: rgb(255 255 255 / 0.85) !important;
+  background: rgb(10 13 11 / 0.78) !important;
   color: var(--color-faint) !important;
   font-size: 10px !important;
 }
@@ -157,8 +177,8 @@ body {
   height: 14px;
   border-radius: 9999px;
   background: var(--color-primary);
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 35%, transparent), 0 1px 3px rgb(20 30 50 / 0.25);
+  border: 2px solid var(--color-on-brand);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 45%, transparent), 0 1px 6px rgb(0 0 0 / 0.5);
   transition: transform 0.15s ease;
   animation: var(--animate-marker-pop);
 }
@@ -187,7 +207,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: var(--color-success);
-  color: #ffffff;
+  color: var(--color-on-brand);
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -206,8 +226,8 @@ body {
   height: 12px;
   border-radius: 9999px;
   background: var(--color-primary);
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 45%, transparent);
+  border: 2px solid var(--color-on-brand);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 50%, transparent);
   cursor: pointer;
 }
 .draw-vertex .v.first {

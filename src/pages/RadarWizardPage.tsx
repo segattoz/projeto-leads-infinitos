@@ -108,7 +108,7 @@ export function RadarWizardPage() {
             <div
               className={cn(
                 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold',
-                i < step ? 'bg-success text-white' : i === step ? 'bg-primary text-white' : 'bg-surface-3 text-faint',
+                i < step ? 'bg-success text-on-brand' : i === step ? 'bg-primary text-on-brand' : 'bg-surface-3 text-faint',
               )}
             >
               {i < step ? <Check className="h-3.5 w-3.5" /> : i + 1}
@@ -274,7 +274,7 @@ export function RadarWizardPage() {
                     setCsvFileName(file.name)
                     setCsvText(await file.text())
                   }}
-                  className="block w-full text-xs text-muted file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white"
+                  className="block w-full text-xs text-muted file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-on-brand"
                 />
                 {csvFileName && <p className="text-[11px] text-success-strong">Arquivo carregado: {csvFileName}</p>}
               </div>

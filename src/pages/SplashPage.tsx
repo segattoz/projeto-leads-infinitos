@@ -68,7 +68,7 @@ export function SplashPage() {
 
         <button
           onClick={() => navigate('/app')}
-          className="group mt-10 inline-flex h-12 items-center gap-2.5 rounded-lg bg-primary px-8 text-sm font-bold tracking-widest text-white transition-all hover:bg-primary-strong hover:shadow-[0_4px_24px_-4px] hover:shadow-primary/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="group mt-10 inline-flex h-12 items-center gap-2.5 rounded-lg bg-primary px-8 text-sm font-bold tracking-widest text-on-brand transition-all hover:bg-primary-strong hover:shadow-[0_4px_28px_-4px] hover:shadow-primary/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           <Crosshair className="h-4 w-4 transition-transform group-hover:rotate-90" />
           ENTRAR NA PLATAFORMA

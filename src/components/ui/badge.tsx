@@ -6,7 +6,7 @@ type Variant = 'default' | 'primary' | 'success' | 'outline' | 'muted' | 'danger
 const variants: Record<Variant, string> = {
   default: 'bg-surface-3 text-muted border border-line-strong',
   primary: 'bg-primary-dim text-primary-strong border border-primary/25',
-  success: 'bg-success text-white border border-success font-bold',
+  success: 'bg-success text-on-brand border border-success font-bold',
   outline: 'border border-line-strong text-muted',
   muted: 'bg-surface-2 text-faint border border-line',
   danger: 'bg-danger-dim text-danger border border-danger/25',

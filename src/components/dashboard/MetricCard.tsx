@@ -35,10 +35,14 @@ export function MetricCard({ icon: Icon, label, value, caption, highlight }: Met
   const displayed = useCountUp(value)
 
   return (
-    <Card className="group p-5 transition-colors hover:border-primary/30">
+    <Card className={`group p-5 transition-colors hover:border-primary/30 ${highlight ? 'glow-primary' : ''}`}>
       <div className="flex items-center justify-between">
         <p className="text-xs font-medium text-muted">{label}</p>
-        <div className="flex h-7 w-7 items-center justify-center rounded-md border border-line bg-surface-2 transition-colors group-hover:border-primary/40">
+        <div
+          className={`flex h-7 w-7 items-center justify-center rounded-md border transition-colors group-hover:border-primary/40 ${
+            highlight ? 'border-primary/30 bg-primary-dim' : 'border-line bg-surface-2'
+          }`}
+        >
           <Icon className="h-3.5 w-3.5 text-primary" />
         </div>
       </div>

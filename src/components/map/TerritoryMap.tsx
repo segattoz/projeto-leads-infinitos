@@ -17,14 +17,14 @@ interface TerritoryMapProps {
   radiusPreview?: { center: [number, number]; radiusKm: number } | null
 }
 
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+const TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
 /**
  * Mapa de configuração de território — desenho de polígono ou raio, usado no
  * editor de ICP e no wizard do Radar. Baseado em Leaflet + OpenStreetMap
- * (tiles CARTO claros, sem token pago).
+ * (tiles CARTO escuros, sem token pago).
  */
 export function TerritoryMap({
   center,
