@@ -3,10 +3,15 @@ import { Toaster } from 'sonner'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { SplashPage } from '@/pages/SplashPage'
 import { DashboardPage } from '@/pages/DashboardPage'
-import { ExplorePage } from '@/pages/ExplorePage'
-import { OpportunitiesPage } from '@/pages/OpportunitiesPage'
-import { PipelinePage } from '@/pages/PipelinePage'
-import { MonitoringPage } from '@/pages/MonitoringPage'
+import { RadarListPage } from '@/pages/RadarListPage'
+import { RadarWizardPage } from '@/pages/RadarWizardPage'
+import { RadarJobDetailPage } from '@/pages/RadarJobDetailPage'
+import { CompaniesPage } from '@/pages/CompaniesPage'
+import { IcpListPage } from '@/pages/IcpListPage'
+import { IcpEditorPage } from '@/pages/IcpEditorPage'
+import { LeadsListPage } from '@/pages/LeadsListPage'
+import { Lead360Page } from '@/pages/Lead360Page'
+import { FunilPage } from '@/pages/FunilPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 
 export default function App() {
@@ -16,20 +21,32 @@ export default function App() {
         <Route path="/" element={<SplashPage />} />
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
-          <Route path="explorar" element={<ExplorePage />} />
-          <Route path="oportunidades" element={<OpportunitiesPage />} />
-          <Route path="pipeline" element={<PipelinePage />} />
-          <Route path="monitoramentos" element={<MonitoringPage />} />
+
+          <Route path="radar" element={<RadarListPage />} />
+          <Route path="radar/novo" element={<RadarWizardPage />} />
+          <Route path="radar/:jobId" element={<RadarJobDetailPage />} />
+
+          <Route path="empresas" element={<CompaniesPage />} />
+
+          <Route path="icps" element={<IcpListPage />} />
+          <Route path="icps/novo" element={<IcpEditorPage />} />
+          <Route path="icps/:id" element={<IcpEditorPage />} />
+
+          <Route path="leads" element={<LeadsListPage />} />
+          <Route path="leads/:id" element={<Lead360Page />} />
+
+          <Route path="funil" element={<FunilPage />} />
+
           <Route path="configuracoes" element={<SettingsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster
         position="bottom-right"
-        theme="dark"
+        theme="light"
         toastOptions={{
           style: {
-            background: 'var(--color-surface-2)',
+            background: 'var(--color-surface)',
             border: '1px solid var(--color-line-strong)',
             color: 'var(--color-ink)',
           },

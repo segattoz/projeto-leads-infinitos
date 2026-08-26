@@ -1,11 +1,11 @@
-import type { Segment } from '@/types'
+import type { SegmentPreset } from '@/types'
 
 /**
  * Catálogo de segmentos comerciais.
  * Cada nicho agrupa um ou mais CNAEs oficiais — estrutura equivalente às
  * tabelas `segments` e `segment_cnaes` previstas para o PostgreSQL.
  */
-export const SEGMENTS: Segment[] = [
+export const SEGMENT_PRESETS: SegmentPreset[] = [
   {
     id: 'seg-01',
     slug: 'oficinas-mecanicas',
@@ -88,6 +88,6 @@ export const SEGMENTS: Segment[] = [
   },
 ]
 
-export function getSegment(slug: string): Segment | undefined {
-  return SEGMENTS.find((s) => s.slug === slug)
+export function getSegmentPreset(slug: string): SegmentPreset | undefined {
+  return SEGMENT_PRESETS.find((s) => s.slug === slug)
 }

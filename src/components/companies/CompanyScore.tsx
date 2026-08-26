@@ -7,14 +7,14 @@ interface CompanyScoreProps {
 }
 
 function scoreColor(score: number): string {
-  if (score >= 75) return 'text-primary-strong'
-  if (score >= 55) return 'text-warn'
+  if (score >= 80) return 'text-success-strong'
+  if (score >= 60) return 'text-warn-strong'
   return 'text-muted'
 }
 
 function barColor(score: number): string {
-  if (score >= 75) return 'bg-primary'
-  if (score >= 55) return 'bg-warn'
+  if (score >= 80) return 'bg-success'
+  if (score >= 60) return 'bg-warn'
   return 'bg-faint'
 }
 

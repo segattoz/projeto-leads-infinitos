@@ -33,7 +33,7 @@ export function Drawer({ open, onClose, children, width = 'max-w-md', title }: D
       />
       <aside
         className={cn(
-          'absolute inset-y-0 right-0 flex w-full flex-col border-l border-line bg-surface shadow-2xl shadow-black/60',
+          'absolute inset-y-0 right-0 flex w-full flex-col border-l border-line bg-surface shadow-2xl shadow-black/15',
           'animate-[drawer-in_0.3s_cubic-bezier(0.16,1,0.3,1)_both]',
           width,
         )}

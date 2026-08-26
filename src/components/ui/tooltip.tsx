@@ -24,7 +24,7 @@ export function Tooltip({ content, children, side = 'top', className }: TooltipP
         <span
           role="tooltip"
           className={cn(
-            'pointer-events-none absolute left-1/2 z-[1300] w-max max-w-56 -translate-x-1/2 rounded-md border border-line-strong bg-surface-3 px-2.5 py-1.5 text-[11px] leading-snug text-ink shadow-xl shadow-black/40 animate-fade-in',
+            'pointer-events-none absolute left-1/2 z-[1300] w-max max-w-56 -translate-x-1/2 rounded-md border border-line-strong bg-surface-3 px-2.5 py-1.5 text-[11px] leading-snug text-ink shadow-xl shadow-black/10 animate-fade-in',
             side === 'top' ? 'bottom-full mb-1.5' : 'top-full mt-1.5',
           )}
         >

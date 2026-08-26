@@ -5,8 +5,9 @@ import type { Lead } from '@/types'
 import { cn, formatRelative } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { CompanyScore } from '@/components/companies/CompanyScore'
-import { companiesById } from '@/services/repositories/CompanyRepository'
-import { getSegment } from '@/data/segments'
+import { isRecentlyDiscovered } from '@/services/companyService'
+import { useCompanyStore } from '@/store/useCompanyStore'
+import { useIcpStore } from '@/store/useIcpStore'
 
 interface LeadCardProps {
   lead: Lead
@@ -21,9 +22,9 @@ export const LeadCard = memo(function LeadCard({ lead, onClick, overlay }: LeadC
     disabled: overlay,
   })
 
-  const company = companiesById.get(lead.companyId)
+  const company = useCompanyStore((s) => s.companies.find((c) => c.id === lead.companyId))
+  const icp = useIcpStore((s) => s.icps.find((i) => i.id === lead.icpId))
   if (!company) return null
-  const segment = getSegment(company.segmentSlug)
 
   return (
     <div
@@ -32,7 +33,7 @@ export const LeadCard = memo(function LeadCard({ lead, onClick, overlay }: LeadC
         'group cursor-pointer rounded-lg border border-line bg-surface-2 p-3 transition-all',
         'hover:border-primary/40 hover:bg-surface-3',
         isDragging && 'opacity-30',
-        overlay && 'rotate-2 border-primary/50 shadow-2xl shadow-black/60',
+        overlay && 'rotate-2 border-primary/50 shadow-2xl shadow-black/10',
       )}
       onClick={() => onClick(lead)}
       role="button"
@@ -44,9 +45,7 @@ export const LeadCard = memo(function LeadCard({ lead, onClick, overlay }: LeadC
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="truncate text-[13px] font-semibold text-ink">{company.nomeFantasia}</p>
-          <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wider text-faint">
-            {segment?.name}
-          </p>
+          <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wider text-faint">{icp?.name}</p>
         </div>
         <button
           className="shrink-0 cursor-grab touch-none rounded p-1 text-faint opacity-60 transition-opacity hover:bg-surface hover:text-muted group-hover:opacity-100 active:cursor-grabbing"
@@ -60,7 +59,7 @@ export const LeadCard = memo(function LeadCard({ lead, onClick, overlay }: LeadC
       </div>
 
       <div className="mt-2">
-        <CompanyScore score={lead.score} />
+        <CompanyScore score={lead.score.total} />
       </div>
 
       <div className="mt-2.5 flex items-center justify-between gap-2 text-[10px] text-faint">
@@ -70,18 +69,14 @@ export const LeadCard = memo(function LeadCard({ lead, onClick, overlay }: LeadC
         </span>
         <span className="flex items-center gap-1">
           <User className="h-2.5 w-2.5" />
-          {lead.owner.split(' ')[0]}
+          {lead.ownerName.split(' ')[0]}
         </span>
       </div>
 
       <div className="mt-1.5 flex items-center justify-between text-[10px]">
         <span className="text-faint">Última interação: {formatRelative(lead.updatedAt)}</span>
-        {companyIsNew(company.discoveredAt) && <Badge variant="lime">Nova</Badge>}
+        {isRecentlyDiscovered(company) && <Badge variant="success">Nova</Badge>}
       </div>
     </div>
   )
 })
-
-function companyIsNew(discoveredAt: string): boolean {
-  return (Date.now() - new Date(discoveredAt).getTime()) / 86_400_000 <= 7
-}

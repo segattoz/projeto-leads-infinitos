@@ -11,14 +11,14 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
-import type { Lead, LeadStatus } from '@/types'
-import { PIPELINE_STAGES } from '@/services/pipelineService'
+import type { Lead, LeadStage } from '@/types'
+import { LEAD_STAGES } from '@/services/leadService'
 import { PipelineColumn } from '@/components/pipeline/PipelineColumn'
 import { LeadCard } from '@/components/pipeline/LeadCard'
 
 interface PipelineBoardProps {
   leads: Lead[]
-  onMoveLead: (leadId: string, status: LeadStatus) => void
+  onMoveLead: (leadId: string, status: LeadStage) => void
   onLeadClick: (lead: Lead) => void
 }
 
@@ -45,7 +45,7 @@ export function PipelineBoard({ leads, onMoveLead, onLeadClick }: PipelineBoardP
     setActiveLead(null)
     const { active, over } = event
     if (over && active.id !== over.id) {
-      onMoveLead(String(active.id), over.id as LeadStatus)
+      onMoveLead(String(active.id), over.id as LeadStage)
     }
   }
 
@@ -58,12 +58,12 @@ export function PipelineBoard({ leads, onMoveLead, onLeadClick }: PipelineBoardP
       onDragCancel={() => setActiveLead(null)}
     >
       <div className="flex h-full gap-3 overflow-x-auto px-4 pb-6 sm:px-6">
-        {PIPELINE_STAGES.map((stage) => (
+        {LEAD_STAGES.map((stage) => (
           <PipelineColumn
             key={stage.id}
             id={stage.id}
             label={stage.label}
-            leads={leads.filter((l) => l.status === stage.id)}
+            leads={leads.filter((l) => l.stage === stage.id)}
             onLeadClick={onLeadClick}
           />
         ))}

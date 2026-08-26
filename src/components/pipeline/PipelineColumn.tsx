@@ -1,10 +1,10 @@
 import { useDroppable } from '@dnd-kit/core'
-import type { Lead, LeadStatus } from '@/types'
+import type { Lead, LeadStage } from '@/types'
 import { cn } from '@/lib/utils'
 import { LeadCard } from '@/components/pipeline/LeadCard'
 
 interface PipelineColumnProps {
-  id: LeadStatus
+  id: LeadStage
   label: string
   leads: Lead[]
   onLeadClick: (lead: Lead) => void

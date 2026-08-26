@@ -26,7 +26,7 @@ export function Checkbox({ checked, onChange, label, className, ...rest }: Check
         className={cn(
           'flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border transition-colors',
           checked
-            ? 'border-primary bg-primary text-[#07130c]'
+            ? 'border-primary bg-primary text-white'
             : 'border-line-strong bg-surface-2 text-transparent hover:border-primary/50',
         )}
       >

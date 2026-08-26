@@ -4,22 +4,31 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Paleta Segatto's Leads — dark tech green */
-  --color-bg: #0a0e0c;
-  --color-surface: #101512;
-  --color-surface-2: #151c17;
-  --color-surface-3: #1b241d;
-  --color-line: #212b24;
-  --color-line-strong: #2e3b32;
-  --color-ink: #ecf1ed;
-  --color-muted: #8fa096;
-  --color-faint: #61705f;
-  --color-primary: #2ed573;
-  --color-primary-strong: #45eb8b;
-  --color-primary-dim: #17482c;
-  --color-lime: #b8f542;
-  --color-danger: #f0655a;
-  --color-warn: #e8b04b;
+  /* Paleta i9 Radar — B2B claro: branco + azul estrutural + verde sucesso + laranja alerta */
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f6f8;
+  --color-surface-3: #eaedf1;
+  --color-line: #e2e6eb;
+  --color-line-strong: #cdd3db;
+  --color-ink: #131a24;
+  --color-muted: #5b6472;
+  --color-faint: #8992a1;
+
+  --color-primary: #2f6fed;
+  --color-primary-strong: #1e56d6;
+  --color-primary-dim: #e8f0fe;
+
+  --color-success: #17925a;
+  --color-success-strong: #0f7a49;
+  --color-success-dim: #e3f6ec;
+
+  --color-warn: #d9720f;
+  --color-warn-strong: #b85e08;
+  --color-warn-dim: #fdf0e1;
+
+  --color-danger: #d9433a;
+  --color-danger-dim: #fbe9e8;
 
   --animate-fade-in: fade-in 0.35s ease both;
   --animate-slide-up: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -54,7 +63,7 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 
 /* Scrollbars discretas */
@@ -74,15 +83,15 @@ body {
   background: transparent;
 }
 
-/* Fundo com grade de coordenadas sutil */
+/* Fundo com grade de coordenadas sutil (splash / empty states) */
 .grid-bg {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--color-primary) 4%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 4%, transparent) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--color-primary) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 6%, transparent) 1px, transparent 1px);
   background-size: 42px 42px;
 }
 
-/* ── Radar (splash) ─────────────────────────────────────────────────────── */
+/* ── Radar (splash / loading) ───────────────────────────────────────────── */
 .radar-sweep {
   position: absolute;
   inset: 0;
@@ -91,8 +100,8 @@ body {
     from 0deg,
     transparent 0deg,
     transparent 300deg,
-    color-mix(in srgb, var(--color-primary) 25%, transparent) 348deg,
-    color-mix(in srgb, var(--color-primary) 55%, transparent) 360deg
+    color-mix(in srgb, var(--color-primary) 20%, transparent) 348deg,
+    color-mix(in srgb, var(--color-primary) 42%, transparent) 360deg
   );
   animation: radar-spin 4.2s linear infinite;
 }
@@ -110,24 +119,24 @@ body {
 
 /* ── Mapa / Leaflet ─────────────────────────────────────────────────────── */
 .leaflet-container {
-  background: #0d1210;
+  background: #eef1f5;
   font-family: var(--font-sans);
   outline: none;
 }
 .leaflet-control-zoom a {
-  background: var(--color-surface-2) !important;
+  background: var(--color-surface) !important;
   color: var(--color-ink) !important;
   border-color: var(--color-line) !important;
 }
 .leaflet-control-zoom a:hover {
-  background: var(--color-surface-3) !important;
+  background: var(--color-surface-2) !important;
 }
 .leaflet-bar {
   border: 1px solid var(--color-line) !important;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.4) !important;
+  box-shadow: 0 4px 16px rgb(20 30 50 / 0.12) !important;
 }
 .leaflet-control-attribution {
-  background: rgb(10 14 12 / 0.75) !important;
+  background: rgb(255 255 255 / 0.85) !important;
   color: var(--color-faint) !important;
   font-size: 10px !important;
 }
@@ -148,8 +157,8 @@ body {
   height: 14px;
   border-radius: 9999px;
   background: var(--color-primary);
-  border: 2px solid #0a0e0c;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 45%, transparent);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 35%, transparent), 0 1px 3px rgb(20 30 50 / 0.25);
   transition: transform 0.15s ease;
   animation: var(--animate-marker-pop);
 }
@@ -158,18 +167,18 @@ body {
 }
 .company-marker.is-selected .dot {
   transform: scale(1.4);
-  background: var(--color-lime);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-lime) 50%, transparent);
+  background: var(--color-warn);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-warn) 45%, transparent);
 }
 .company-marker.is-high .dot {
-  background: var(--color-primary-strong);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-strong) 55%, transparent);
+  background: var(--color-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-success) 45%, transparent);
 }
 .company-marker.is-high .pulse {
   position: absolute;
   inset: -7px;
   border-radius: 9999px;
-  border: 1.5px solid var(--color-primary-strong);
+  border: 1.5px solid var(--color-success);
   animation: radar-ping 2s ease-out infinite;
 }
 .company-marker .new-badge {
@@ -177,8 +186,8 @@ body {
   top: -16px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-lime);
-  color: #101408;
+  background: var(--color-success);
+  color: #ffffff;
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -187,7 +196,7 @@ body {
   white-space: nowrap;
 }
 
-/* Vértices do desenho de polígono */
+/* Vértices do desenho de território */
 .draw-vertex {
   background: transparent;
   border: none;
@@ -196,9 +205,9 @@ body {
   width: 12px;
   height: 12px;
   border-radius: 9999px;
-  background: var(--color-lime);
-  border: 2px solid #0a0e0c;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-lime) 55%, transparent);
+  background: var(--color-primary);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 45%, transparent);
   cursor: pointer;
 }
 .draw-vertex .v.first {
