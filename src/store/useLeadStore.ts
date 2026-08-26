@@ -8,10 +8,14 @@ import { useIcpStore } from '@/store/useIcpStore'
 import { logAudit } from '@/store/useAuditStore'
 import { buildDemoLeadsAndActivities } from '@/data/leads.demo'
 
+export type ConvertCompanyResult =
+  | { ok: true; lead: Lead }
+  | { ok: false; reason: 'already_lead' | 'icp_missing' }
+
 interface LeadState {
   leads: Lead[]
   activities: Activity[]
-  convertCompany: (company: Company, ownerName: string) => Lead | null
+  convertCompany: (company: Company, ownerName: string) => ConvertCompanyResult
   moveStage: (
     leadId: string,
     stage: LeadStage,
@@ -41,9 +45,14 @@ export const useLeadStore = create<LeadState>()(
       ...seedInitialState(),
 
       convertCompany: (company, ownerName) => {
-        if (get().hasCompany(company.id)) return null
+        if (get().hasCompany(company.id)) return { ok: false, reason: 'already_lead' }
         const icp = useIcpStore.getState().icps.find((i) => i.id === company.icpId)
-        if (!icp) return null
+        if (!icp) {
+          console.error(
+            `[i9radar] Não foi possível converter "${company.nomeFantasia}" (id ${company.id}): ICP "${company.icpId}" não encontrado.`,
+          )
+          return { ok: false, reason: 'icp_missing' }
+        }
         const version = getCurrentVersion(icp)
         const lead = convertCompanyToLead(company, icp, version, ownerName)
         const activity = createActivity(company.organizationId, lead.id, 'note', ownerName, {
@@ -53,7 +62,7 @@ export const useLeadStore = create<LeadState>()(
         useCompanyStore.getState().updateStatus(company.id, 'convertida')
         logAudit(company.organizationId, 'company', company.id, 'company_converted', `Convertida em lead (score ${lead.score.total})`, ownerName)
         logAudit(company.organizationId, 'lead', lead.id, 'score_calculated', `Score inicial calculado: ${lead.score.total}/100`, ownerName)
-        return lead
+        return { ok: true, lead }
       },
 
       moveStage: (leadId, stage, opts = {}) =>

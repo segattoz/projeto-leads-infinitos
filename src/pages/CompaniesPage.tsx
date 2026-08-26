@@ -36,7 +36,7 @@ export function CompaniesPage() {
   const [search, setSearch] = useState('')
   const [icpFilter, setIcpFilter] = useState('todos')
   const [situacaoFilter, setSituacaoFilter] = useState('ATIVA')
-  const [statusFilter, setStatusFilter] = useState('todos')
+  const [statusFilter, setStatusFilter] = useState('descoberta')
   const [page, setPage] = useState(0)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [drawerCompany, setDrawerCompany] = useState<Company | null>(null)
@@ -62,13 +62,14 @@ export function CompaniesPage() {
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const currentPage = Math.min(page, pageCount - 1)
   const pageRows = filtered.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE)
-  const allPageSelected = pageRows.length > 0 && pageRows.every((r) => selectedIds.has(r.company.id))
+  const selectablePageRows = pageRows.filter((r) => !leadByCompanyId.has(r.company.id))
+  const allPageSelected = selectablePageRows.length > 0 && selectablePageRows.every((r) => selectedIds.has(r.company.id))
 
   const toggleAll = () => {
     setSelectedIds((prev) => {
       const next = new Set(prev)
-      if (allPageSelected) pageRows.forEach((r) => next.delete(r.company.id))
-      else pageRows.forEach((r) => next.add(r.company.id))
+      if (allPageSelected) selectablePageRows.forEach((r) => next.delete(r.company.id))
+      else selectablePageRows.forEach((r) => next.add(r.company.id))
       return next
     })
   }
@@ -82,28 +83,36 @@ export function CompaniesPage() {
   }
 
   const handleConvert = (company: Company) => {
-    const lead = convertCompany(company, 'Você')
-    if (lead) {
+    const result = convertCompany(company, 'Você')
+    if (result.ok) {
       toast.success(`${company.nomeFantasia} convertida em lead.`, {
-        action: { label: 'Ver lead', onClick: () => navigate(`/app/leads/${lead.id}`) },
+        action: { label: 'Ver lead', onClick: () => navigate(`/app/leads/${result.lead.id}`) },
       })
-    } else {
+    } else if (result.reason === 'already_lead') {
       toast.info(`${company.nomeFantasia} já é um lead.`)
+    } else {
+      toast.error(`Não foi possível converter ${company.nomeFantasia}: ICP vinculado não foi encontrado.`)
     }
     setDrawerOpen(false)
   }
 
   const handleConvertSelected = () => {
     let converted = 0
+    let icpMissing = 0
     selectedIds.forEach((id) => {
       const company = companies.find((c) => c.id === id)
-      if (company && convertCompany(company, 'Você')) converted++
+      if (!company) return
+      const result = convertCompany(company, 'Você')
+      if (result.ok) converted++
+      else if (result.reason === 'icp_missing') icpMissing++
     })
     setSelectedIds(new Set())
     if (converted > 0) {
       toast.success(`${converted} ${converted === 1 ? 'empresa convertida' : 'empresas convertidas'} em lead.`, {
         action: { label: 'Ver leads', onClick: () => navigate('/app/leads') },
       })
+    } else if (icpMissing > 0) {
+      toast.error('Não foi possível converter: ICP vinculado não foi encontrado para as empresas selecionadas.')
     } else {
       toast.info('As empresas selecionadas já são leads.')
     }
@@ -234,6 +243,7 @@ export function CompaniesPage() {
                       <Checkbox
                         checked={selectedIds.has(company.id)}
                         onChange={() => toggleOne(company.id)}
+                        disabled={Boolean(lead)}
                         aria-label={`Selecionar ${company.nomeFantasia}`}
                       />
                     </td>
